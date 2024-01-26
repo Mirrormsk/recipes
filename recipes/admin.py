@@ -4,7 +4,7 @@ from recipes.models import Recipe, Product, Ingredient
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'usage_count']
+    list_display = ['pk', 'title', 'usage_count']
     fields = ['title', 'usage_count']
     readonly_fields = ['usage_count']
     search_fields = ['title']
@@ -18,7 +18,7 @@ class IngredientInlineAdmin(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['pk', 'title']
     fields = ['title']
     inlines = [IngredientInlineAdmin]
     search_fields = ['title']
