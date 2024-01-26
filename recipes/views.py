@@ -17,7 +17,7 @@ class RecipeListView(ListView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
 
-        excluded_product_id = self.request.GET.get('exclude')
+        excluded_product_id = self.request.GET.get('product_id')
         if excluded_product_id is not None:
             excluded_product = get_object_or_404(Product, id=excluded_product_id)
             context_data['excluded_product_name'] = excluded_product.title
