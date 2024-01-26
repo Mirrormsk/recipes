@@ -119,11 +119,13 @@ LOGOUT_REDIRECT_URL = "/"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://0.0.0.0",
+    "http://5.35.82.129"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://0.0.0.0",
+    "http://5.35.82.129"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
