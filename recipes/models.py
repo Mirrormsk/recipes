@@ -46,4 +46,4 @@ class Ingredient(models.Model):
         if not self.pk:
             self.product.usage_count += 1
             self.product.save()
-        super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
