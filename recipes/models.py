@@ -26,9 +26,9 @@ class Recipe(models.Model):
 
 class Ingredient(models.Model):
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="Продукт"
+        Product, on_delete=models.CASCADE,
     )
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="Рецепт")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="ingredients")
     quantity = models.PositiveIntegerField(verbose_name="Количество")
     quantity_unit = models.CharField(
         max_length=10, verbose_name="Единица измерения", default="г."
