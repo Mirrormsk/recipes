@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from recipes.models import Recipe, Product, Ingredient
+from recipes.services import RecipeService
 
 
 def add_product_to_recipe(request):
@@ -35,3 +36,22 @@ def add_product_to_recipe(request):
         )
 
     return JsonResponse({"message": message}, status=201)
+
+
+def cook_recipe(request):
+    """Функция увеличивает на единицу количество
+    приготовленных блюд для каждого продукта,
+    входящего в указанный рецепт."""
+    recipe_id = request.GET.get("recipe_id")
+    if not recipe_id:
+        return JsonResponse(
+            {
+                "message": "Missing one of required parameters recipe_id"
+            },
+            status=400,
+        )
+
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    RecipeService.increment_ingredients_usage_counters(recipe)
+
+    return JsonResponse({"message": "OK", "status": 200})
