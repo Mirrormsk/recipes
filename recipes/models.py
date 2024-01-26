@@ -41,9 +41,3 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return f"{self.product.title} - {self.quantity} {self.quantity_unit}"
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.product.usage_count += 1
-            self.product.save()
-        return super().save(*args, **kwargs)
