@@ -1,8 +1,39 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
 
 from recipes.models import Recipe, Product, Ingredient
 from recipes.services import RecipeService
+
+
+class RecipeListView(ListView):
+    """
+    List all recipes if param "exclude" not sent,
+    else only recipes without exclude ingredient or if
+    that ingredient count less than 10 g.
+    """
+    model = Recipe
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        excluded_product_id = self.request.GET.get('exclude')
+        if excluded_product_id is not None:
+            excluded_product = get_object_or_404(Product, id=excluded_product_id)
+            context_data['excluded_product_name'] = excluded_product.title
+        return context_data
+
+    def get_queryset(self):
+        excluded_product_id = self.request.GET.get('exclude')
+        queryset = super().get_queryset()
+
+        if excluded_product_id is not None:
+
+            excluded_product = get_object_or_404(Product, id=excluded_product_id)
+            recipes_with_excluded_product = queryset.filter(ingredients__product=excluded_product, ingredients__quantity__gt=10)
+            return queryset.exclude(id__in=recipes_with_excluded_product)
+
+        return queryset
 
 
 def add_product_to_recipe(request):
@@ -55,3 +86,5 @@ def cook_recipe(request):
     RecipeService.increment_ingredients_usage_counters(recipe)
 
     return JsonResponse({"message": "OK", "status": 200})
+
+
