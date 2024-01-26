@@ -24,7 +24,7 @@ class RecipeListView(ListView):
         return context_data
 
     def get_queryset(self):
-        excluded_product_id = self.request.GET.get('exclude')
+        excluded_product_id = self.request.GET.get('product_id')
         queryset = super().get_queryset()
 
         if excluded_product_id is not None:
