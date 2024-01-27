@@ -80,6 +80,7 @@ def cook_recipe(request):
                 "message": "Missing one of required parameters recipe_id"
             },
             status=400,
+            content_type='application/json; charset=utf-8',
         )
 
     recipe = get_object_or_404(Recipe, id=recipe_id)
