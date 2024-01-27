@@ -56,7 +56,7 @@ def add_product_to_recipe(request):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     product = get_object_or_404(Product, id=product_id)
     ingredient, created = Ingredient.objects.update_or_create(
-        recipe=recipe, product=product, quantity=weight
+        recipe=recipe, product=product, defaults={"quantity": weight}
     )
 
     if created:
@@ -66,7 +66,7 @@ def add_product_to_recipe(request):
             f"Product '{product.title}' was be corrected in recipe {recipe.title}."
         )
 
-    return JsonResponse({"message": message}, status=201)
+    return JsonResponse({"message": message}, status=201, json_dumps_params={'ensure_ascii': False})
 
 
 def cook_recipe(request):
