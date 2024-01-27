@@ -15,8 +15,8 @@ class RecipeService:
         :type recipe: Recipe
         :return: None
         """
-        used_products_ids = recipe.ingredients.values_list("product_id", flat=True)
         with transaction.atomic():
+            used_products_ids = recipe.ingredients.values_list("product_id", flat=True)
             Product.objects.filter(pk__in=used_products_ids).select_for_update().update(
                 usage_count=F("usage_count") + 1
             )
