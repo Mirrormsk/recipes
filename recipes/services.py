@@ -1,8 +1,9 @@
 import time
 
 from django.db import transaction, DatabaseError
+from django.db.models import F
 
-from recipes.models import Recipe
+from recipes.models import Recipe, Product
 
 
 class RecipeService:
@@ -14,8 +15,8 @@ class RecipeService:
         :type recipe: Recipe
         :return: None
         """
-        ingredients = recipe.ingredients.select_for_update().all()
+        used_products_ids = recipe.ingredients.values_list("product_id", flat=True)
         with transaction.atomic():
-            for ingredient in ingredients:
-                ingredient.product.usage_count += 1
-                ingredient.product.save()
+            Product.objects.filter(pk__in=used_products_ids).select_for_update().update(
+                usage_count=F("usage_count") + 1
+            )
